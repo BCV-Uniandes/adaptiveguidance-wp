@@ -5,7 +5,7 @@ This is the repository that contains source code for the Adaptive Guidance websi
 If you find Adaptive Guidance useful for your work please cite:
 ```
 @article{castillo2023ag,
-  author    = {Castillo, Angela and Kohler, Jonas and Perez, Juan C. and Pumarola, Albert and Ghanem, Bernard and Arbeláez, Pablo and Thabet, Ali},
+  author    = {Castillo, Angela and Kohler, Jonas and Perez, Juan C. and Pérez, Juan Pablo and Pumarola, Albert and Ghanem, Bernard and Arbeláez, Pablo and Thabet, Ali},
   title     = {Adaptive Guidance: Training-free Acceleration of Conditional Diffusion Models},
   journal   = {ArXiv},
   year      = {2023},
