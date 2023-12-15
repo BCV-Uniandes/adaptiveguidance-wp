@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="description"
+        content="Adaptive Guidance: Training-free Acceleration of Conditional Diffusion Models.">
+  <!-- <meta name="keywords" content="Nerfies, D-NeRF, NeRF"> -->
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Adaptive Guidance: Training-free Acceleration of Conditional Diffusion Models</title>
+
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <!-- <script async src="https://www.googletagmanager.com/gtag/js?id=G-PYVRSFMDRL"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+
+    function gtag() {
+      dataLayer.push(arguments);
+    }
+
+    gtag('js', new Date());
+
+    gtag('config', 'G-PYVRSFMDRL');
+  </script> -->
+
+  <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro"
+        rel="stylesheet">
+
+  <link rel="stylesheet" href="./static/css/bulma.min.css">
+  <link rel="stylesheet" href="./static/css/bulma-carousel.min.css">
+  <link rel="stylesheet" href="./static/css/bulma-slider.min.css">
+  <link rel="stylesheet" href="./static/css/fontawesome.all.min.css">
+  <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+  <link rel="stylesheet" href="./static/css/index.css">
+  <link rel="icon" href="./static/images/favicon.svg">
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script defer src="./static/js/fontawesome.all.min.js"></script>
+  <script src="./static/js/bulma-carousel.min.js"></script>
+  <script src="./static/js/bulma-slider.min.js"></script>
+  <script src="./static/js/index.js"></script>
+</head>
+<body>
+
+<nav class="navbar" role="navigation" aria-label="main navigation">
+  <div class="navbar-brand">
+    <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false">
+      <span aria-hidden="true"></span>
+      <span aria-hidden="true"></span>
+      <span aria-hidden="true"></span>
+    </a>
+  </div>
+  <!-- <div class="navbar-menu">
+    <div class="navbar-start" style="flex-grow: 1; justify-content: center;">
+     <a class="navbar-item" href="https://keunhong.com">
+      <span class="icon">
+          <i class="fas fa-home"></i>
+      </span>
+      </a> 
+
+       <div class="navbar-item has-dropdown is-hoverable">
+        <a class="navbar-link">
+          More Research
+        </a>
+        <div class="navbar-dropdown">
+          <a class="navbar-item" href="https://hypernerf.github.io">
+            HyperNeRF
+          </a>
+          <a class="navbar-item" href="https://nerfies.github.io">
+            Nerfies
+          </a>
+          <a class="navbar-item" href="https://latentfusion.github.io">
+            LatentFusion
+          </a>
+          <a class="navbar-item" href="https://photoshape.github.io">
+            PhotoShape
+          </a>
+        </div> 
+       </div>
+    </div>
+
+  </div> -->
+</nav>
+
+
+<section class="hero">
+  <div class="hero-body">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered">
+        <div class="column has-text-centered">
+          <h1 class="title is-1 publication-title">Adaptive Guidance: Training-free Acceleration of Conditional Diffusion Models</h1>
+          <div class="is-size-5 publication-authors">
+            <span class="author-block">
+              <a href="https://angelacast135.github.io">Angela Castillo</a><sup>*1</sup>,</span>
+            <span class="author-block">
+              <a href="https://scholar.google.de/citations?hl=de&user=a1rCLUMAAAAJ&view_op=list_works&sortby=pubdate">Jonas Kohler</a><sup>*2</sup>,</span>
+            <span class="author-block">
+              <a href="https://www.juancprzs.com">Juan C. Pérez</a><sup>*2,3</sup>,
+            </span>
+            <span class="author-block">
+              <a href="https://linkedin.com/in/juan-perez-9679a3298">Juan Pablo Pérez</a><sup>1</sup>
+            </span>
+            <span class="author-block">
+              <a href="https://www.albertpumarola.com">Albert Pumarola</a><sup>2</sup>,
+            </span>
+            <p></p>
+            <span class="author-block">
+              <a href="https://www.bernardghanem.com">Bernard Ghanem</a><sup>3</sup>,
+            </span>
+            <span class="author-block">
+              <a href="https://scholar.google.com/citations?user=k0nZO90AAAAJ&hl=en&oi=ao">Pablo Arbeláez</a><sup>1</sup>,
+            </span>
+            <span class="author-block">
+              <a href="https://scholar.google.com/citations?user=7T0CPEkAAAAJ&hl=en">Ali Thabet</a><sup>2</sup>,
+            </span>
+          </div>
+
+          <div class="is-size-5 publication-authors">
+            <span class="author-block"><sup>1</sup>CINFONIA, Universidad de Los Andes, </span>
+            <span class="author-block"><sup>2</sup>Meta AI</span>            
+            <span class="author-block"><sup>3</sup>King Abdullah University of Science and Technology (KAUST), </span>
+          </div>
+           <div class="is-size-5 publication-authors">
+            <span class="author-block"><sup>*</sup>Denotes equal contribution.</span> 
+          </div>
+
+          <div class="column has-text-centered">
+            <div class="publication-links">
+              <!-- PDF Link. -->
+              <span class="link-block">
+                <a href="https://arxiv.org/pdf/2304.11118.pdf"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="fas fa-file-pdf"></i>
+                  </span>
+                  <span>Paper</span>
+                </a>
+              </span>
+              <span class="link-block">
+                <a href="https://arxiv.org/abs/2304.11118"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="ai ai-arxiv"></i>
+                  </span>
+                  <span>arXiv</span>
+                </a>
+              </span>
+              <!-- Video Link. -->
+              <!-- <span class="link-block">
+                <a href="https://www.youtube.com/watch?v=MrKrnHhk8IA"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="fab fa-youtube"></i>
+                  </span>
+                  <span>Video</span>
+                </a>
+              </span> -->
+              <!-- Code Link. -->
+              <!-- <span class="link-block">
+                <a href="https://github.com/google/nerfies"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="fab fa-github"></i>
+                  </span>
+                  <span>Code</span>
+                  </a>
+              </span> -->
+              <!-- Dataset Link. -->
+              <!-- <span class="link-block">
+                <a href="https://github.com/google/nerfies/releases/tag/0.1"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="far fa-images"></i>
+                  </span>
+                  <span>Data</span>
+                  </a> -->
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="hero teaser">
+  <div class="container is-max-desktop">
+    <div class="hero-body">
+      <video id="teaser" autoplay muted loop playsinline height="100%">
+        <source src="./static/videos/AdaptiveGuidance-wp.mp4"
+                type="video/mp4">
+      </video>
+      <!-- <h2 class="subtitle has-text-centered">
+        <span class="dnerf">BoDiffusion</span> synthesizes more accurate motions with substantially less jitter than AvatarPoser.
+      </h2> -->
+    </div>
+  </div>
+</section>
+
+
+<!-- <section class="hero is-light is-small">
+  <div class="hero-body">
+    <div class="container">
+      <div id="results-carousel" class="carousel results-carousel">
+        <div class="item item-steve">
+          <video poster="" id="steve" autoplay controls muted loop playsinline height="100%">
+            <source src="./static/videos/steve.mp4"
+                    type="video/mp4">
+          </video>
+        </div>
+        <div class="item item-chair-tp">
+          <video poster="" id="chair-tp" autoplay controls muted loop playsinline height="100%">
+            <source src="./static/videos/chair-tp.mp4"
+                    type="video/mp4">
+          </video>
+        </div>
+        <div class="item item-shiba">
+          <video poster="" id="shiba" autoplay controls muted loop playsinline height="100%">
+            <source src="./static/videos/shiba.mp4"
+                    type="video/mp4">
+          </video>
+        </div>
+        <div class="item item-fullbody">
+          <video poster="" id="fullbody" autoplay controls muted loop playsinline height="100%">
+            <source src="./static/videos/fullbody.mp4"
+                    type="video/mp4">
+          </video>
+        </div>
+        <div class="item item-blueshirt">
+          <video poster="" id="blueshirt" autoplay controls muted loop playsinline height="100%">
+            <source src="./static/videos/blueshirt.mp4"
+                    type="video/mp4">
+          </video>
+        </div>
+        <div class="item item-mask">
+          <video poster="" id="mask" autoplay controls muted loop playsinline height="100%">
+            <source src="./static/videos/mask.mp4"
+                    type="video/mp4">
+          </video>
+        </div>
+        <div class="item item-coffee">
+          <video poster="" id="coffee" autoplay controls muted loop playsinline height="100%">
+            <source src="./static/videos/coffee.mp4"
+                    type="video/mp4">
+          </video>
+        </div>
+        <div class="item item-toby">
+          <video poster="" id="toby" autoplay controls muted loop playsinline height="100%">
+            <source src="./static/videos/toby2.mp4"
+                    type="video/mp4">
+          </video>
+        </div>
+      </div>
+    </div>
+  </div>
+</section> -->
+
+
+<section class="section">
+  <div class="container is-max-desktop">
+    <!-- Abstract. -->
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3">Abstract</h2>
+        <div class="content has-text-justified">
+          <p>
+            This paper presents a comprehensive study on the role of Classifier-Free Guidance (CFG) in text-conditioned diffusion models from the perspective of inference efficiency. 
+            In particular, we relax the default choice of applying CFG in all diffusion steps and instead search for efficient guidance policies. 
+            We formulate the discovery of such policies in the differentiable Neural Architecture Search framework. 
+          </p>
+          
+          <p>
+            Our findings suggest that the denoising steps proposed by CFG become increasingly aligned with simple conditional steps, 
+            which renders the extra neural network evaluation of CFG redundant, especially in the second half of the denoising process. 
+            Building upon this insight, we propose <span class="dnerf">Adaptive Guidance (AG)</span>, an efficient variant of CFG, 
+            that adaptively omits network evaluations when the denoising process displays convergence. 
+            Our experiments demonstrate that AG preserves CFG's image quality while reducing computation by 25%. 
+            Thus, AG constitutes a plug-and-play alternative to Guidance Distillation, achieving 50% of the speed-ups of the 
+            latter while being training-free and retaining the capacity to handle negative prompts. 
+            Finally, we uncover further redundancies of CFG in the first half of the diffusion process, showing that entire neural 
+            function evaluations can be replaced by simple affine transformations of past score estimates. 
+            This method, termed <span class="dnerf">LinearAG</span>, offers even cheaper inference at the cost of deviating from the baseline model. 
+            Our findings provide insights into the efficiency of the conditional denoising process that contribute to more 
+            practical and swift deployment of text-conditioned diffusion models.
+            
+          </p>
+        </div>
+      </div>
+    </div>
+    <!--/ Abstract. -->
+
+    <!-- Paper video. -->
+    <!-- <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3">Video</h2>
+        <div class="publication-video">
+          <iframe src="https://www.youtube.com/embed/MrKrnHhk8IA?rel=0&amp;showinfo=0"
+                  frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+        </div>
+      </div>
+    </div> -->
+    <!--/ Paper video. -->
+  </div>
+</section>
+
+
+<section class="section">
+  <div class="container is-max-desktop">
+
+    <div class="columns is-centered">
+      <div class="column is-full-width">
+        <h2 class="title is-3"><span class="dnerf">Adaptive Guidance</span> </h2>
+        <!-- Interpolating. -->
+        <h3 class="title is-4">Guided Diffusion Accelerating</h3>
+        <div class="column content">
+          <p>
+            <span class="dnerf">Adaptive Guidance</span> is an efficient variant of Classifier-Free Guidance 
+            that saves 25% of total NFEs without compromising image quality.
+          </p>
+          <!-- <video id="matting-video" controls playsinline height="100%">
+            <source src="./static/videos/matting.mp4"
+            type="video/mp4">
+          </video> -->
+          <div class="content has-text-centered">
+            <img src="./static/images/Fig1.png"
+            class="interpolation-image"
+            alt="Interpolate start reference image."/>
+          </div>
+          
+        </div>
+        
+        <h3 class="title is-4">Adaptive Guidance vs. Classifier-Free Guidance </h3>
+        <div class="column content">
+          <p>
+            For <span class="dnerf">Adaptive Guidance</span> we keep the number of denoising iterations constant 
+            but reduce the number of steps using CFG by increasing the threshold (top). 
+            CFG simply reduces the total number of diffusion steps (bottom).
+            
+          </p>
+          <!-- <video id="matting-video" controls playsinline height="100%">
+            <source src="./static/videos/matting.mp4"
+                    type="video/mp4">
+          </video> -->
+          <div class="content has-text-centered">
+            <img src="./static/images/Picture2.png"
+                class="interpolation-image"
+                alt="Interpolate start reference image."/>
+          </div>
+          
+        </div>
+
+        <!-- <div class="column content">
+          <p>
+            <span class="dnerf">Adaptive Guidance</span> synthesizes substantially more accurate 
+            and plausible full-body poses, particularly in the lower body where no 
+            IMU data are captured.
+          </p>
+          <video id="matting-video" controls playsinline height="100%">
+            <source src="./static/videos/matting.mp4"
+                    type="video/mp4">
+          </video>
+          <div class="content has-text-centered">
+            <img src="./static/images/seq_color_dit.png"
+                class="interpolation-image"
+                alt="Interpolate start reference image."/>
+          </div>
+        </div> -->
+      </div>
+    </div>
+    <!--/ Matting. -->
+
+    <!-- Animation. -->
+    <div class="columns is-centered">
+      <div class="column is-full-width">
+        <h2 class="title is-3">Neural Architecture Search (NAS)</h2>
+
+        <!-- Interpolating. -->
+        <h3 class="title is-4">Search Space</h3>
+        <div class="column content">
+          <p>
+            We employ techniques from differentiable Neural Architecture Search (NAS) to search for policies offering 
+            more desirable trade-offs between quality and Number of Function Evaluations (NFEs).
+          </p>
+          <!-- <video id="matting-video" controls playsinline height="100%">
+            <source src="./static/videos/matting.mp4"
+                    type="video/mp4">
+          </video> -->
+          <div class="content has-text-centered">
+            <img src="./static/images/NAS.png"
+                class="interpolation-image"
+                alt="Interpolate start reference image."/>
+          </div>
+          
+        </div>
+        <h3 class="title is-4">NAS Results</h3>
+        <div class="column content">
+          <p>
+            Search uncovers interesting pattern: CFG steps are important in the 
+            first half of the diffusion process but later become redundant.
+          </p>
+          <!-- <video id="matting-video" controls playsinline height="100%">
+            <source src="./static/videos/matting.mp4"
+                    type="video/mp4">
+          </video> -->
+          <div class="content has-text-centered">
+            <img src="./static/images/nas_results.png"
+                class="interpolation-image"
+                alt="Interpolate start reference image."/>
+          </div>
+          <div class="content has-text-centered">
+            <img src="./static/images/alphas_score.png"
+                class="interpolation-image"
+                alt="Interpolate start reference image."/>
+          </div>
+          
+        </div>
+        <h2 class="title is-3">Cosine Similarity Analysis</h2>
+        <!-- <h3 class="title is-4">Cosine Similarity Analysis</h3> -->
+        <div class="column content">
+          <p>
+            We find that conditional and unconditional updates become increasingly correlated over time.
+          </p>
+          <!-- <video id="matting-video" controls playsinline height="100%">
+            <source src="./static/videos/matting.mp4"
+            type="video/mp4">
+          </video> -->
+          <div class="content has-text-centered">
+            <img src="./static/images/cosine.png"
+            class="interpolation-image"
+            alt="Interpolate start reference image."/>
+          </div>
+        </div>
+        
+        <h2 class="title is-3">More Results</h2>
+        <h3 class="title is-4">Negative Prompts</h3>
+        <div class="column content">
+          <p>
+            We also find that AG produces similar results to CFG when using non-empty negative prompts, 
+            again highlighting the importance of only the first T2 diffusion steps for semantic structure.
+          </p>
+          <!-- <video id="matting-video" controls playsinline height="100%">
+            <source src="./static/videos/matting.mp4"
+                    type="video/mp4">
+          </video> -->
+          <div class="content has-text-centered">
+            <img src="./static/images/negative.png"
+                class="interpolation-image"
+                alt="Interpolate start reference image."/>
+          </div>
+        </div>
+
+        <h3 class="title is-4">Image Editing</h3>
+        <div class="column content">
+          <p>
+            We use an instruction-based editing with EMU Edit, which builds upon InstructPix2Pix.
+            Classic CFG editing and our method editing give equal quality results while reducing NFEs by 33.3%. 
+            Importantly, Guidance Distillation is not directly applicable for this task as the update steps are conditioned on the input image.
+
+          </p>
+          <!-- <video id="matting-video" controls playsinline height="100%">
+            <source src="./static/videos/matting.mp4"
+                    type="video/mp4">
+          </video> -->
+          <div class="content has-text-centered">
+            <img src="./static/images/editing.png"
+                class="interpolation-image"
+                alt="Interpolate start reference image."/>
+          </div>
+        </div>
+        <br/>
+      </div>
+    </div>
+    <!--/ Animation. -->
+
+
+    <!-- Concurrent Work. -->
+    <!-- <div class="columns is-centered">
+      <div class="column is-full-width">
+        <h2 class="title is-3">Related Links</h2>
+
+        <div class="content has-text-justified">
+          <p>
+            There's a lot of excellent work that was introduced around the same time as ours.
+          </p>
+          <p>
+            <a href="https://arxiv.org/abs/2104.09125">Progressive Encoding for Neural Optimization</a> introduces an idea similar to our windowed position encoding for coarse-to-fine optimization.
+          </p>
+          <p>
+            <a href="https://www.albertpumarola.com/research/D-NeRF/index.html">D-NeRF</a> and <a href="https://gvv.mpi-inf.mpg.de/projects/nonrigid_nerf/">NR-NeRF</a>
+            both use deformation fields to model non-rigid scenes.
+          </p>
+          <p>
+            Some works model videos with a NeRF by directly modulating the density, such as <a href="https://video-nerf.github.io/">Video-NeRF</a>, <a href="https://www.cs.cornell.edu/~zl548/NSFF/">NSFF</a>, and <a href="https://neural-3d-video.github.io/">DyNeRF</a>
+          </p>
+          <p>
+            There are probably many more by the time you are reading this. Check out <a href="https://dellaert.github.io/NeRF/">Frank Dellart's survey on recent NeRF papers</a>, and <a href="https://github.com/yenchenlin/awesome-NeRF">Yen-Chen Lin's curated list of NeRF papers</a>.
+          </p>
+        </div>
+      </div>
+    </div> -->
+    <!--/ Concurrent Work. -->
+
+  </div>
+</section>
+
+
+<section class="section" id="BibTeX">
+  <div class="container is-max-desktop content">
+    <h2 class="title">BibTeX</h2>
+    <pre><code>@article{castillo2023bodiffusion,
+  author    = {Castillo, Angela and Kohler, Jonas and Perez, Juan C. and Pumarola, Albert and Ghanem, Bernard and Arbeláez, Pablo and Thabet, Ali},
+  title     = {Adaptive Guidance: Training-free Acceleration of Conditional Diffusion Models},
+  journal   = {Arxiv},
+  year      = {2023},
+}</code></pre>
+  </div>
+</section>
+
+
+<footer class="footer">
+  <div class="container">
+    <div class="content has-text-centered">
+      <a class="icon-link"
+         href="./static/images/2304.11118.pdf">
+        <i class="fas fa-file-pdf"></i>
+      </a>
+      <a class="icon-link" href="https://github.com/angelacast135" class="external-link" disabled>
+        <i class="fab fa-github"></i>
+      </a>
+    </div>
+    <div class="columns is-centered">
+      <div class="column is-8">
+        <div class="content">
+          <!-- <p>
+            This website is licensed under a <a rel="license"
+                                                href="http://creativecommons.org/licenses/by-sa/4.0/">Creative
+            Commons Attribution-ShareAlike 4.0 International License</a>.
+          </p> -->
+          <p>
+            This website uses the template from this <a
+              href="https://github.com/nerfies/nerfies.github.io">source code</a>.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
